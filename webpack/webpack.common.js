@@ -1,37 +1,48 @@
-import { resolve as _resolve } from 'path';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CopyPlugin from 'copy-webpack-plugin';
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 
-export const entry = _resolve(__dirname, '..', './src/Index.tsx');
-export const resolve = {
-  extensions: ['.tsx', '.ts', '.js'],
-};
-export const module = {
-  rules: [
-    {
-      test: /\.(ts|js)x?$/,
-      exclude: /node_modules/,
-      use: [
-        {
-          loader: 'babel-loader',
-        },
-      ],
-    },
-    {
-      test: /\.css$/,
-      use: ['style-loader', 'css-loader'],
-    }
+module.exports = {
+  entry: path.resolve(__dirname, '..', './src/Index.tsx'),
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(ts|js)x?$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+        type: 'asset/inline',
+      },
+    ],
+  },
+  output: {
+    path: path.resolve(__dirname, '..', './build'),
+    filename: 'bundle.js',
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, '..', './src/index.html'),
+    }),
+    new CopyPlugin({
+      patterns: [{ from: 'src', to: 'build' }],
+    }),
   ],
-};
-export const output = {
-  path: _resolve(__dirname, '..', '/build'),
-  filename: 'bundle.js',
-};
-export const plugins = [
-  new HtmlWebpackPlugin({
-    template: _resolve(__dirname, '..', './src/index.html'),
-  }),
-  new CopyPlugin({
-    patterns: [{ from: 'source', to: 'dest' }],
-  }),
-];
+  stats: 'errors-only',
+}
