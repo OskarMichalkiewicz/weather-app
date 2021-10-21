@@ -1,7 +1,11 @@
 import { AxiosResponse } from 'axios'
 import { Weather } from './interfaces'
+
 export function getDayFromText(date: string): number {
   return +date.slice(8, 10)
+}
+export function getDateFromText(date: string): string {
+  return date.slice(5, 10)
 }
 export function getHourFromText(date: string): number {
   return +date.slice(11, 13)
@@ -18,11 +22,10 @@ export function summary(data: any[]) {
             typeof obj[key] == 'number'
               ? acc.set(
                   key,
-                  // immediately invoked function:
                   (([sum, count]) => [sum + obj[key], count + 1])(
                     acc.get(key) || [0, 0]
                   )
-                ) // pass previous value
+                )
               : acc,
           acc
         ),
@@ -35,6 +38,11 @@ export function sortResponse(response: AxiosResponse<Weather>) {
   const days = [
     ...new Set([
       ...response.data.list.map((item) => getDayFromText(item.dt_txt)),
+    ]),
+  ]
+  const dates = [
+    ...new Set([
+      ...response.data.list.map((item) => getDateFromText(item.dt_txt)),
     ]),
   ]
   const sortedByDays = []
@@ -80,5 +88,5 @@ export function sortResponse(response: AxiosResponse<Weather>) {
       ),
     })
   }
-  return sortedByDaysAndTime
+  return [sortedByDaysAndTime, dates]
 }
