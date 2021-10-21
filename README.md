@@ -1,6 +1,10 @@
 # weather-app
 
-To start the app:
-* first clone it, 
-* then use 'npm i' to install all the dependencies,
-* then use 'npm start' to start webpack dev server
+To install all necessary dependencies run `npm i`.
+
+### Usage
+
+- `npm start` - runs webpack dev server opens [localhost:8080]
+- `npm run lint` - Runs es-lint with fix flag
+- `npm run prettier` - Runs prettier with write flag
+- `npm run build` - creates `build` folder with all the needed files included.
